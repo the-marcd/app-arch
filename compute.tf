@@ -11,18 +11,13 @@ data "aws_ami" "ecs-ami" {
     }
 }
 
-
-
-resource "aws_ecs_cluster" "ecs-cluster" {
-    name = "ecs-cluster"
-}
-
 resource "aws_launch_configuration" "lc" {
     name_prefix = "ecs-lc"
     image_id = data.aws_ami.ecs-ami.image_id
     instance_type = "t3.micro"
     iam_instance_profile = aws_iam_instance_profile.ecs-profile.name
     key_name = "marcd"
+    security_groups = [aws_security_group.compute-servers.id,module.vpc.default_security_group_id]
     user_data_base64 = base64encode(templatefile("scripts/userdata.sh",
      {
          ecs_cluster_name = aws_ecs_cluster.ecs-cluster.name

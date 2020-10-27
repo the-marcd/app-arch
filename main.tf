@@ -15,5 +15,7 @@ provider "aws" {
 
 variable "azs" {
     type = list
-    default = ["us-east-2b,us-east-2c"]
+    default = ["us-east-2b","us-east-2c"]
 }
+
+data "aws_caller_identity" "current" {}
